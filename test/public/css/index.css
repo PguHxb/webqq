@@ -1,0 +1,224 @@
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.clearfix:after {
+  content: '';
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.container {
+  width: 1020px;
+  margin: 0 auto;
+}
+#page {
+  height: 800px;
+  width: 100%;
+  background-image: url(../img/bg1.png);
+  position: relative;
+}
+#page .nav-top {
+  line-height: 75px;
+  height: 75px;
+}
+#page .nav-top a {
+  font: "微软雅黑" arial;
+  font-size: 16px;
+  margin: 15px;
+  cursor: pointer;
+}
+#page .nav-top a:hover {
+  color: #94DFFF;
+  text-decoration: none;
+}
+#page .nav-top .nav-top-left li {
+  float: left;
+}
+#page .nav-top .nav-top-right li {
+  float: left;
+}
+#page .mid_img {
+  height: 500px;
+  width: 300px;
+  position: absolute;
+  left: 500px;
+  opacity: 0.4;
+}
+#page .footer {
+  position: absolute;
+  top: 580px;
+  opacity: 0.6;
+}
+
+.QQlogin{
+            position: absolute;
+            left:calc(50% - 215px);
+            top:calc(45% - 10px);
+            width:430px;
+            height:333px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 100;
+            display: none;
+        }
+        .QQlogin aside{
+            width:100%;
+            height:180px;
+            cursor: move;
+        }
+        .QQlogin .head-pic{
+        	display: inline-block;
+        	position: relative;
+        	background-image: url(../img/100.png);
+        	top: 50px;
+        	left: 170px;
+        	width: 100px;
+        	height: 100px;
+        	border-radius: 50%;
+        	border: 1px solid #5E5E5E;
+        }
+        .down{
+            width:100%;
+            position: relative;
+            height:153px;
+            background-color:#CDD1BA;
+            margin-right: 0;
+            margin-left: 0;
+        }
+         .mess{
+        	position: absolute;
+        	top: 20px;
+        	left: 320px;
+        	z-index: 2;
+        	
+        }
+        .mess span{
+        	display: block;
+        	color: red;
+        	margin: 4px 0px;
+        	height: 20px;
+        	line-height: 20px;
+        }
+       
+        .login-box{
+            margin-top: 15px;
+            margin-left: 100px;
+               
+             }
+            
+        .login-box input{
+            height:30px;
+            width:195px;
+            border:1px solid #d1d1d1;
+            padding-left:10px;
+            color:#7e7e7e;
+        }
+        
+        .login-box input::-webkit-input-placeholder{
+            color:#7e7e7e;
+        }
+        .login-box span.first{
+            display: inline-block;
+            position: absolute;
+            width:20px;
+            height:20px;
+            background: url("../img/row.png") no-repeat;
+            margin-left: 172px;
+            top:8px;
+        }
+        .login-box span.second{
+            display: inline-block;
+            position: absolute;
+            width:20px;
+            height:20px;
+            background: url("../img/press.png") no-repeat;
+            margin-left: 168px;
+            top:34px;
+        }
+        .login-box input:first-child{
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border-bottom: none;
+        }
+        .login-box input:last-child{
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        .login-box label {
+            font-size: 10px;
+            color:#656565;
+            font-weight: normal;
+
+            text-indent: 15px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .login-box label.auto-login{
+            margin-left: 49px;
+        }
+        .login-box input.three{
+            width:16px;
+            height:16px;
+            margin-top: 1px;
+            position: absolute;
+            margin-left: -15px;
+        }
+        .login-box input.four{
+            width:16px;
+            height:16px;
+            margin-top: 1px;
+            position: absolute;
+            margin-left: -15px;
+        }
+        .login-box button{
+            display: block;
+            width:195px;
+            height:30px;
+            background-color: #16a8de;
+            color:#fff;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: -500;
+        }
+        .register{
+            position: absolute;
+            margin-top: 22px;
+            margin-left: 335px;
+        }
+        
+        .mask{
+            width:100%;
+            height:100%;
+            background-color: #000;
+            position: absolute;
+            top:0;
+            bottom: 0;
+            left:0;
+            right:0;
+            z-index: -3000;
+            opacity: 0.3;
+            filter: Alpha(opacity=40);
+            display: none;
+        }
+        .login a{
+            color: #ff023a;
+            font-size: 30px;
+            font-weight: 600;
+            position: absolute;
+            left:calc(50% - 100px);
+            top:calc(55% - 10px);
+        }
+        .QQlogin i.close{
+            position: absolute;
+            z-index: 100000;
+            display: inline-block;
+            width:20px;
+            height:20px;
+            top: 3px;
+            right: 5px;
+            background-image: url("../img/close.png");
+        }

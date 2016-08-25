@@ -1,0 +1,155 @@
+<!--
+	作者：1591210402@qq.com
+	时间：2016-07-21
+	描述：
+-->
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<title>注册</title>
+		<meta charset="UTF-8">
+		<script type="text/javascript" src="../public/js/jquery-1.11.1.js"></script>
+		<link rel="stylesheet" href="../public/css/bootstrap.min.css" />
+		<script type="text/javascript" src="../public/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../public/js/jQuery.form.js"></script>
+	</head>
+
+	<body>
+		
+			<div class="modal fade ">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">欢迎注册</h4>
+						</div>
+						<div class="modal-body">
+							<p>
+								<form>
+									<div class="form-group ">
+										<label for="input-username">用户名</label>
+										<input type="text" class="form-control" id="input-username" placeholder="请输入用户名">
+										<span class="help-block sr-only">用户名需要字母开头的3-10位英文数字下划线组合</span>
+										<span class="help-block sr-only">用户名已被注册</span>
+									</div>
+									<div class="form-group ">
+									    <label for="input-password">密码</label>
+									    <input type="password" class="form-control" id="input-password" placeholder="请输入密码">
+									    <span class="help-block sr-only">密码为6-16位</span>
+  									</div>
+  									<div class="form-group ">
+									    <label for="input-confirmpassword">确认密码</label>
+									    <input type="password" class="form-control" id="input-confirmpassword" placeholder="请输入密码">
+									    <span class="help-block sr-only">两次输入的密码不一致</span>
+  									</div>
+  									<div class="form-group ">
+									    <label for="input-tel">电话</label>
+									    <input type="text" class="form-control" id="input-tel" placeholder="请输入电话号码">
+									    <span class="help-block sr-only">请输入正确的手机号</span>
+  									</div>
+  									<div class="form-group ">
+									    <label for="input-email">邮箱</label>
+									    <input type="email" class="form-control" id="input-email" placeholder="请输入邮箱">
+									    <span class="help-block sr-only">请输入正确的邮箱</span>
+  									</div>
+								</form>
+							</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+							<button type="button"  id="btn_regist" class="btn btn-primary">注册</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
+		
+		<script>
+		
+		
+		$(function(){
+			
+			$('.modal').modal('show');
+			var checks = {
+				_dealCheck: function(input,checkResult){
+					if(checkResult){
+						//匹配
+						input.parent().addClass("has-success").removeClass("has-error").find('.help-block:first').addClass('sr-only');
+						return true;
+					}else{
+						//不匹配
+						input.parent().addClass('has-error').removeClass('has-success').find('.help-block:first').removeClass('sr-only');
+						return true;
+					}
+				},
+				
+				checkUersname: function(){
+					var input = $('#input-username');
+					input .parent().find('.help-block').addClass('sr-only');
+					if(checks._dealCheck(input,/^[a-zA-Z][a-zA-Z0-9_]{2,9}$/.test(input.val()))) {
+						var result ;
+						$.ajax({
+							type:"get",
+							url:"/checkUserName",
+							async:false,//必须设置为同步执行
+							data: {
+								username: input.val()
+							},
+							success: function(data){
+								if(data.success){
+									input.parent().addClass('has-success').removeClass('has-error').find('.help-block:eq(1)').addClass('sr-only');
+									result = true;
+								}else{
+									input.parent().addClass('has-error').removeClass('has-success').find('.help-block:eq(1)').removeClass('sr-only');
+									result = false;
+								}
+							}
+						})
+						return result;
+						}else{
+							return false;
+						}
+					},
+					checkPwd: function(){
+						var input = $('#input-password');
+						return checks._dealCheck(input,input.val().length > 5 && input.val().length < 17)
+					},
+					
+					checkAllAndSubmit: function(){
+						var errCount = 0;
+						if(!checks.checkUersname()) errCount++;
+						if(!checks.checkPwd()) errCount++;
+						if(errCount>0){
+							//有错误
+							return false;
+						}else{
+							$('form').ajaxSubmit({
+								url:'/postregist',
+								type:'post',
+								datatype:'json',
+								success:function(data){
+									if(data.success){
+										alert(data,message);
+										location.href = '/login';
+									}
+								}
+							});
+						}
+					}
+					
+				}
+				$('#input-username').keyup(checks.checkUersname);
+				$('#input-password').keyup(checks.checkPwd);
+				$('#btn_regist').click(checks.checkAllAndSubmit);
+				
+				
+			})
+			
+			
+		</script>
+	</body>
+
+</html>

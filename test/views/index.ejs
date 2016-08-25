@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="../public/js/jquery-1.11.1.js"></script>
+		<link rel="stylesheet" href="../public/css/bootstrap.min.css" />
+		<script type="text/javascript" src="../public/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../public/js/jQuery.form.js"></script>
+		<link rel="stylesheet" href="../public/css/cssReset.css" />
+		<link rel="stylesheet" href="../public/css/index.css" />
+		
+		<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/jQuery.form.js"></script>
+		<link rel="stylesheet" href="css/cssReset.css" />
+		<link rel="stylesheet" href="css/index.css" />
+		
+	</head>
+	<body>
+		<div id="page">
+			<div class="nav-top container">
+				<ul class="nav-top-left fl">
+					<li class="nav-img"><img src="/img/imlogo.png"></li>
+					<li><a href="index.ejs">首页</a></li>
+				</ul>
+				<ul class="nav-top-right fr">
+					<li class="qq_login"><a data-toggle="modal" data-target=".login_model">登录</a>
+					<li><a data-toggle="modal" data-target=".register-dialog">注册</li></a>
+				</ul>
+			</div>
+			<div class="mid_img">
+				<img src="/img/img_qq4.jpg"  data-toggle="modal" data-target=".login_model">登录</button>/>
+			</div>
+			<div class="footer">
+				<img src="/img/footer_img.jpg" />
+			</div>
+		</div>
+		
+		<div id="mask" class="mask"></div>
+		
+    	
+    
+    <!--这是一个注册的页面-->
+    <div class="modal fade register-dialog">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">欢迎注册</h4>
+						</div>
+						<div class="modal-body">
+							<p>
+								<form id="form_register">
+									<div class="form-group ">
+										<label for="input-username">用户名</label>
+										<input type="text" class="form-control" id="input-username" name="username" placeholder="请输入用户名">
+										<span class="help-block sr-only">用户名需要字母开头的3-10位英文数字下划线组合</span>
+										<span class="help-block sr-only">用户名已被注册</span>
+									</div>
+									<div class="form-group ">
+									    <label for="input-password">密码</label>
+									    <input type="password" class="form-control" id="input-password" name="password" placeholder="请输入密码">
+									    <span class="help-block sr-only">密码为6-16位</span>
+  									</div>
+  									<div class="form-group ">
+									    <label for="input-confirmpassword">确认密码</label>
+									    <input type="password" class="form-control" id="input-confirmpassword" placeholder="请输入密码">
+									    <span class="help-block sr-only">两次输入的密码不一致</span>
+  									</div>
+  									<div class="form-group ">
+									    <label for="input-tel">电话</label>
+									    <input type="text" class="form-control" id="input-tel" name="mobile" placeholder="请输入电话号码">
+									    <span class="help-block sr-only">请输入正确的手机号</span>
+  									</div>
+  									<div class="form-group ">
+									    <label for="input-email">邮箱</label>
+									    <input type="email" class="form-control" id="input-email" name="email" placeholder="请输入邮箱">
+									    <span class="help-block sr-only">请输入正确的邮箱</span>
+  									</div>
+								</form>
+							</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+							<button type="button"  id="btn_regist" class="btn btn-primary">注册</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
+    		
+    		
+    		 <!--这是一个登录的页面-->
+    		 
+    		<div id="regist_modal" class="modal fade login_model">
+			<div class="modal-dialog  modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">用户登录</h4>
+					</div>
+					<div class="modal-body">
+						<form id="form_login">
+							<div class="form-group ">
+								<label class="control-label" for="input_username">用户名</label>
+								<input class="form-control" id="input_username" name="login-username">
+								<span class="help-block sr-only">用户名需要字母开头的3-10位英文数字下划线组合</span>
+							</div>
+							<div class="form-group ">
+								<label class="control-label" for="input_password">密码</label>
+								<input class="form-control" type="password" id="input_password" name="login-password">
+								<span class="help-block sr-only">密码为6-16位</span>
+							</div>
+							
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" id="btn_login" class="btn btn-primary"> 登录</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+    		 
+    		 
+   
+    <script>
+    	$(function(){
+    		//注册的js代码
+			var checks = {
+				_dealCheck: function(input,checkResult){
+					if(checkResult){
+						//匹配
+						input.parent().addClass("has-success").removeClass("has-error").find('.help-block:first').addClass('sr-only');
+						return true;
+					}else{
+						//不匹配
+						input.parent().addClass('has-error').removeClass('has-success').find('.help-block:first').removeClass('sr-only');
+						return true;
+					}
+				},
+				
+				checkUersname: function(){
+					var input = $('#input-username');
+					input .parent().find('.help-block').addClass('sr-only');
+					if(checks._dealCheck(input,/^[a-zA-Z][a-zA-Z0-9_]{2,9}$/.test(input.val()))) {
+						var result ;
+						$.ajax({
+							type:"get",
+							url:"/checkUserName",
+							async:false,//必须设置为同步执行
+							data: {
+								username: input.val()
+							},
+							success: function(data){
+								if(data.success){
+									input.parent().addClass('has-success').removeClass('has-error').find('.help-block:eq(1)').addClass('sr-only');
+									result = true;
+								}else{
+									input.parent().addClass('has-error').removeClass('has-success').find('.help-block:eq(1)').removeClass('sr-only');
+									result = false;
+								}
+							}
+						})
+						return result;
+						}else{
+							return false;
+						}
+					},
+					checkPwd: function(){
+						var input = $('#input-password');
+						return checks._dealCheck(input,input.val().length > 5 && input.val().length < 17)
+					},
+					checkConfirmPwd:function(){
+						var input1 =$("#input-password");
+						var input = $("#input-confirmpassword");
+						if(checks._dealCheck(input,input1.val()==input.val())){
+							return true;
+						}else{
+							return false;
+						}
+						
+					},
+					checkphone:function(){
+						var input = $("#input-tel");
+						if(checks._dealCheck(input,/^1[3|4|5|7|8]\d{9}$/.test(input.val()))){
+							return true;
+						}else{
+							return false;
+						}
+					},
+					checkEmail:function(){
+						var input = $("#input-email");
+						if(checks._dealCheck(input,/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(input.val()))){
+							return true;	
+						}else{
+							return false;
+						}
+					},
+					checkAllAndSubmit: function(){
+						var errCount = 0;
+						if(!checks.checkUersname()) errCount++;
+						if(!checks.checkPwd()) errCount++;
+						if(!checks.checkConfirmPwd()) errCount++;
+						if(!checks.checkphone()) errcount++;
+						if(!checks.checkEmail()) errCount++;
+						if(errCount>0){
+							//有错误
+							return false;
+						}else{
+							$('#form_register').ajaxSubmit({
+								url:'/postregist',
+								type:'post',
+								datatype:'json',
+								success:function(data){
+									if(data.success){
+										alert(data.message);
+										$(".login_model").modal('show');
+										$(".register-dialog").modal("hide");
+									}
+								}
+							});
+						}
+					}
+					
+				}
+				$('#input-username').keyup(checks.checkUersname);
+				$('#input-password').keyup(checks.checkPwd);
+				$('#input-email').keyup(checks.checkEmail);
+				$("#input-confirmpassword").keyup(checks.checkConfirmPwd);
+				$("#input-tel").keyup(checks.checkphone);
+				$('#btn_regist').click(checks.checkAllAndSubmit);
+				
+				//这是登录的js代码
+				
+			
+
+				var check2 = {
+					_dealCheck: function(input, checkResult) {
+
+						if(checkResult) {
+							//匹配
+							input.parent().addClass('has-success').removeClass('has-error').find('.help-block:first').addClass('sr-only');
+							return true;
+						} else {
+							//不匹配
+							input.parent().addClass('has-error').removeClass('has-success').find('.help-block:first').removeClass('sr-only');
+							return false;
+						}
+					},
+					checkUsername: function() {
+						var input = $('#input_username');
+						return check2._dealCheck(input, /^[a-zA-Z][a-zA-Z0-9_]{2,9}$/.test(input.val()));
+					},
+					checkPwd: function() {
+						var input = $('#input_password');
+						return check2._dealCheck(input, input.val().length > 5 && input.val().length < 17)
+					},
+					checkAllAndSubmit: function() {
+						
+						var errCount = 0;
+						if(!check2.checkUsername()) errCount++;
+						if(!check2.checkPwd()) errCount++;
+
+						if(errCount > 0) {
+							
+							//有错误
+							return false;
+						} else {
+							
+							$('#form_login').ajaxSubmit({
+								url: '/postlogin',
+								type: "post",
+								dataType: 'json',
+								success: function(data) {
+									if(data.success) {
+										location.href = '/login_after';
+									}
+								}
+							});
+						}
+					}
+				}
+				$('#input_username').keyup(check2.checkUsername);
+				$('#input_password').keyup(check2.checkPwd);
+				$('#btn_login').click(check2.checkAllAndSubmit);
+				
+			})
+			
+			
+			
+			
+			
+			
+    </script>
+	</body>
+</html>

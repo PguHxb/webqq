@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../public/css/cssReset.css" />
+		<link rel="stylesheet" href="../public/css/menu.css" />
+		<script type="text/javascript" src="../public/js/jquery-1.11.1.js" ></script>
+		<script type="text/javascript" src="../public/js/login_after.js" ></script>
+		<script type="text/javascript" src="../public/js/angular.js" ></script>
+		<link rel="stylesheet" href="../public/css/bootstrap.css" />
+		<script type="text/javascript" src="../public/js/bootstrap.js" ></script>
+		<script type="text/javascript" src="../public/js/controller/main.js" ></script>
+		<script type="text/javascript" src="../public/js/controller/addfriend.js" ></script>
+		<script type="text/javascript" src="../public/js/controller/userlist.js" ></script>
+		<script type="text/javascript" src="../public/js/controller/EditInfo.js" ></script>
+		<script type="text/javascript" src="../public/js/controller/comfirmFriend.js" ></script>
+		<script type="text/javascript" src="../public/js/controller/chatCtrl.js" ></script>
+		<script type="text/javascript" src="../public/js/preview.js" ></script>
+		<script type="text/javascript" src="../public/js/jQuery.form.js" ></script>
+		<script type="text/javascript" src="../public/js/socket.io.js" ></script>
+		
+		
+		<link rel="stylesheet" href="/css/cssReset.css" />
+		<link rel="stylesheet" href="/css/menu.css" />
+		<script type="text/javascript" src="/js/jquery-1.11.1.js" ></script>
+		<script type="text/javascript" src="/js/login_after.js" ></script>
+		<script type="text/javascript" src="js/angular.js" ></script>
+		<script type="text/javascript" src="/js/bootstrap.js" ></script>
+		<link rel="stylesheet" href="/css/bootstrap.css" />
+		<script type="text/javascript" src="/js/controller/main.js" ></script>
+		<script type="text/javascript" src="/js/controller/addfriend.js" ></script>
+		<script type="text/javascript" src="/js/controller/userlist.js" ></script>
+		<script type="text/javascript" src="/js/controller/EditInfo.js" ></script>
+		<script type="text/javascript" src="/js/controller/comfirmFriend.js" ></script>
+		<script type="text/javascript" src="/js/controller/chatCtrl.js" ></script>
+		<script type="text/javascript" src="/js/preview.js" ></script>
+		<script type="text/javascript" src="/js/jQuery.form.js" ></script>
+		<script src="js/socket.io.js"></script>
+		
+		
+		
+	</head>
+
+	<body ng-app="webqq" ng-controller="main"><!--主控制器绑定在body下面，以便事件的监听-->
+		<div class="qq_top" >
+			<div class="qq_top_logo">
+				<img src="img/imlogo.png" />
+
+			</div>
+			<div class="login_info fr">
+				<ul>
+					<li>
+						<a class="login_info_pic" ng-click="showEditInfoDialog()">
+							<img ng-src="{{mine.headshot}}"  />
+						
+						</a>
+						
+					</li>
+					<li>
+						<div class="login-info_mes">
+						<% if(username!='未登录'){ %>
+    					<a href="/logout">退出</a>
+    					<% }else{%>
+    					<a href="/index">登录</a>
+    					<%} %>
+						</div>
+						
+					</li>
+					
+				</ul>
+			</div>
+		</div>
+		<div id="qq_menu">
+			<div class="menu-container" > <!--
+                                                                   	时间：2016-07-28
+                                                                   	描述：ng-controller="addfriend",
+                                                                   	控制器是为了下方的 ng-click="showAddFriendDialog()事件。
+                                                                   -->
+				<div class="menu-top clearfix">
+					<div class="head-pic fl">
+						<img ng-src="{{mine.headshot}}" />
+					</div>
+					<div class="user_info">
+						<span class="name fl"><span>{{mine.nickname}}</span></span>
+						<a  class="info-icon" ng-click="showConfirmFriendDialog()"  ng-class="{'flash':friendRequests.length>0}" style="display: none"><span class=" glyphicon glyphicon-volume-up"></span></a>
+					</div>
+				</div>
+				<div class="menu-mid" ng-click="showAddFriendDialog()">
+					<i class="mid-serach"></i>
+					<input class="mid_serach_input" type="text" placeholder="搜索" />
+				</div>
+				<div class="nav-footer">
+					<ul>
+						<li>
+							<div class="pre" ng-class="mainTab==2?'active':''" ng-click="mainTab=2;">
+								<a title="聊天"><i class="pre-icon"></i></a>
+								<a class="badge " ng-bind="(newMessagesCache|newmessagecount)>0?(newMessagesCache|newmessagecount)>99?'99+':(newMessagesCache|newmessagecount):''" style="position: relative;top:-42px;right:-48px;background-color:#3FAE37;height: 18px;width: 30px;"></a>
+							</div>
+						</li>
+						<li>
+							<div class="mid">
+								<a title="群聊"><i class="mid-icon"></i></a>
+							</div>
+						</li>
+						<li>
+							<div class="next" ng-class="mainTab!=2?'active':''" ng-click="mainTab=1;">
+								<a title="好友"><i class="next-icon"></i></a>
+							</div>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+
+			<div class="content">
+                                 
+				<div class="chat-content ">
+					<!--描述：聊天的目录-->
+					<ul>
+						<li>
+							<div class="mid-content" ng-repeat="chat in chatList|orderBy:['t']:true" ng-dblclick="openChat(chat.i)" style="margin-top: 10px;">
+								<img ng-src="{{infoCache[chat.i].headshot}}">
+								<h3 class="content-name">{{((friends|filter:{friendid:chat.i}:true)[0].remark)||infoCache[chat.i].nickname}}</h3>
+								<div class="dialog-content" ng-bind="chat.m"></div>
+								<span class="time badge" style="height:18px;width 30px;background-color: #3FAE37;" ng-bind="newMessagesCache[chat.i].length>0?newMessagesCache[chat.i].length>99?'99+':newMessagesCache[chat.i].length:''"></span>
+
+							</div>
+
+						</li>
+						
+						
+					</ul>
+				</div>
+				<div class="group-content">
+					<div></div>
+					kasdihekjhaks
+				</div>
+				<div  class="friend-content" >
+						<!--描述：好友列表 -->
+				<div ng-if="true" class="friend-content-body">
+				<div class="main-tabs">
+					
+					<ul class="main-tabs-panels">
+						<li ng-controller="userlist" class="active " ng-class="mainTab!=2?'active':''" my-contextmenu="showAddGroupContextMenu(event)">
+							<ul class="user-group-list">
+								<li ng-repeat="group in groups" class="user-group-item">
+									<span class="user-group-item-name" my-contextmenu="showGroupContextMenu(event,group)"><span class="right">></span><span class="bottom">∨</span> {{group.groupname}}</span>
+									<ul class="user-list">
+										<li ng-repeat="friend in friends |filter:{groupid:group.id}" ng-click="$parent.$parent.selectFriend=friend"   ng-class="{'select':$parent.$parent.selectFriend==friend}" ng-dblclick="openChat(friend.friendid)">
+											<img src="{{friend.headshot}}">
+											<p>
+												<label ng-bind="friend.nickname"></label>
+												<span ng-bind="friend.signature"></span>
+												<a class="badge " ng-bind="newMessagesCache[friend.friendid].length>0?newMessagesCache[friend.friendid].length>99?'99+':newMessagesCache[friend.friendid].length:''"  style="position: absolute;top:1px;right:1px;background-color:#3FAE37;">99+</a>
+											</p>
+
+										</li>
+									</ul>
+								</li>
+							</ul>
+
+						</li>
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+				
+			
+			
+			
+			</div>
+		</div>
+		
+		
+			
+		
+		<div class="modal fade" id="serach_friend" ng-controller="addfriend" ><!--描述：添加好友的模态框和搜索好友的模态框-->
+		  <div class="modal-dialog" ng-class="{'modal-sm':(step==2) }">
+		    <div class="modal-content">
+		      <div class="modal-header" >
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title"><span class="glyphicon glyphicon-user"></span>添加好友</h4>
+		      </div>
+		      <div class="modal-body">
+		       		<div ng-show="step==1">
+		       			<form name="searchform" class="row">
+							<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-0">
+								<div class="input-group">
+									<input ng-model="kw"  placeholder="请输入好友账号、昵称" class="form-control" ng-value="keyword" ng-model="searchKeyword">
+									<span class="input-group-btn">
+       									<button ng-click="search()" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> 查找好友</button>
+									</span>
+								</div>
+							</div>
+						</form>
+						
+						<div class="row result">
+								<div  class="col-xs-6 col-sm-4"   ng-repeat="item in items" >
+									<div  class="blcok-search-item " ng-class="(item==selectItem?'select':'')" ng-click="select(item)" >
+										<img ng-src="{{item.headshot}}">
+										<p>
+											<label>{{item.nickname}}</label>
+											<span>{{item.signature}}</span>
+										</p>
+									</div>
+								</div>
+								
+						</div>
+		       		</div>	
+		       		<div ng-show="step==2" >
+							<form >
+								<div class="form-group">
+									<label>昵称</label>
+								   <p class="form-control-static">{{selectItem.nickname}}</p>
+								</div>
+								<div class="form-group ">
+									<label>分组</label>
+									<select class="form-control" ng-model="group" ng-options="x.groupname for x in groups" >
+									
+									</select>
+								</div>
+								<div class="form-group">
+									<label>备注</label>
+									<input class="form-control" ng-model="remark"/>
+								</div>
+								<div class="form-group">
+									<label>验证消息</label>
+									<textarea class="form-control" ng-model="message"></textarea>
+								</div>
+							</form>
+						</div>
+		       			
+		       		
+		      </div>
+		      <div class="modal-footer" >
+		      	<button type="button" class="btn btn-default" ng-show="step==2" ng-click="step=1">返回</button>
+		      	<button type="button" class="btn btn-primary" ng-show="step==2" ng-click="send()">发送申请</button>
+		        <button type="button" class="btn btn-default" data-dismiss="modal" ng-show="step==1">关闭</button>
+		        <button type="button" class="btn btn-primary"  ng-disabled="selectItem==undefined" ng-show="step==1" ng-click="setInfo()">添加</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		
+		<div class="modal fade" id="editinfo" ng-controller="EditInfo">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title"><span class="glyphicon glyphicon-pencil"></span> 修改资料</h4>
+		      </div>
+		      <div class="modal-body">
+		        <form name="editInfoForm" id="form-editinfo" >
+					<div class="">
+						<div class="headshot">
+							<script src="js/preview.js"></script>
+							<div id="preview">
+								
+							</div>
+							<input class="form_group_choice" type="file" name="headshot" onchange="previewImage(this,'preview')"><!-- 窗体改变触发函数，插件-->
+						</div>
+						
+					</div>
+					<div class="form-group editinfo_nickname">
+						<label>
+							昵称 :
+						</label>
+						<input class="form-control"  name="nickname" ng-model="copymine.nickname">
+					</div>
+							
+				</form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+		        <button type="button" class="btn btn-primary" ng-click="save()">保存</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		
+		<div class="modal fade " ng-controller="confirmFriend" id="confirmfriend"  >
+			<div class="modal-dialog  ">
+				<div class="modal-content ">
+					<div class="modal-header ">
+
+						<button type="button " class="close " data-dismiss="modal" aria-label="Close "><span aria-hidden="true ">&times;</span></button>
+						<h4 class="modal-title "><span class="glyphicon glyphicon-user "></span> 好友添加请求</h4>
+					</div>
+					<div class="modal-body ">
+
+						<form>
+							<div class="row ">
+								<div class="col-xs-8 ">
+									<div class="blcok-friendinfo ">
+										<img ng-src="{{infoCache[confirmInfo.from].headshot}}">
+										<p>
+											<label>{{infoCache[confirmInfo.from].username}}</label>
+											<span>{{infoCache[confirmInfo.from].signature}}</span>
+										</p>
+									</div>
+
+								</div>
+								<div class="col-xs-4">
+									<div class="radio ">
+										<!--ng-checked="pass=='true'",当为true的时候，后面ng-show="pass=='true'"会将好友添加分组打开
+											ng-checked="pass=='false'"为falsede 时候，ng-show是关闭的
+										-->
+										<label><input type="radio" name="pass" value="true" ng-model="pass" ng-checked="pass=='true'" >通过</label>
+									</div>
+									<div class="radio ">
+										<label><input type="radio" name="pass" value="false" ng-model="pass" ng-checked="pass=='false'" >拒绝</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group " style="margin-top: 5px; ">
+								<label>附加消息</label>
+								<blockquote class="form-control-static " style="font-size: 14px; ">
+									{{confirmInfo.message||"无"}}
+								</blockquote>
+							</div>
+							<div ng-show="pass=='true'">
+								<div class="form-group ">
+									<label>分组</label>
+									<select class="form-control " ng-model="group" ng-options="x.groupname for x in groups">
+
+									</select>
+								</div>
+								<div class="form-group ">
+									<label>备注</label>
+									<input class="form-control " name="remark" placeholder="可以选填备注信息 " ng-model="remark " />
+								</div>
+							</div>
+						</form>
+
+					</div>
+					<div class="modal-footer ">
+
+						<button type="button " class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon glyphicon-remove "></span> 关闭</button>
+						<button ng-click="confirmResult() " type="button  class="btn btn-primary "><span class="glyphicon glyphicon-ok "></span> 确定</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!--这是好友之间对话的框架-->
+		<div ng-controller="chatCtrl">
+			<div class="chat-panel " ng-class="chatPanels.length>1?'muit':''" ng-show="chatPanels.length>0">
+				<div class="left">
+					<ul>
+						<li ng-repeat="chatPanel in chatPanels" ng-class="chatPanel==nowChatPanel?'active':''" ng-click="chatManager.openChat(chatPanel.id)">
+							<img class="f-headshot" ng-src="{{infoCache[chatPanel.id].headshot}}" />
+							<label class="f_nick">{{((friends|filter:{friendid:chatPanel.id}:true)[0].remark)||infoCache[chatPanel.id].nickname}}</label>
+							<a class="close" ng-click="chatManager.deletePanel($index)">&times</a><!--这是关闭多个好友聊天的状态栏-->
+							<a class="badge " ng-bind="newMessagesCache[chatPanel.id].length>0?newMessagesCache[chatPanel.id].length>99?'99+':newMessagesCache[chatPanel.id].length:''" style="position: absolute;top:1px;left:1px;background-color:steelblue;">99+</a>
+						</li>
+					</ul>
+				</div>
+				<div class="right">
+					<div ng-repeat="chatPanel in chatPanels" class="single-chat " ng-class="chatPanel==nowChatPanel?'active':''">
+						<div class="trow">
+							<div class="title-box">
+								<span class="close" ng-click="chatManager.deletePanel($index)">&times;</span><!--这是关闭好友聊天窗口-->
+								<div>
+									<img ng-src="{{infoCache[chatPanel.id].headshot}}">
+									<p>
+										<label>{{((friends|filter:{friendid:chatPanel.id}:true)[0].remark)||infoCache[chatPanel.id].nickname}}</label>
+										<span>{{infoCache[chatPanel.id].signature}}</span>
+									</p>
+								</div>
+
+							</div>
+						</div>
+						<div class="trow" style="overflow: hidden ;">
+							<div class="message-box" id="chatbox_{{chatPanel.id}}">
+								<div class="message-wrap">
+									<a class="load" href="javascript:void(0)" ng-show="chatPanel.skip>0" style="font-size: 12px;" ng-click="chatManager.setSkip(chatPanel)">加载更多历史记录</a>
+									<div ng-repeat="msg in chatPanel.showingMessages">
+										<i ng-if="$first||($index>0&&(msg.s-chatPanel.showingMessages[$index-1].s)>=10*1000)" ng-bind="$first?(msg.s|jdate|date:'MM-dd HH:mm'):((msg.s|jdate|getDate)!=(chatPanel.showingMessages[$index-1].s|jdate|getDate) ?(msg.s|jdate|date:'MM-dd HH:mm'):( msg.s|jdate|date:'HH:mm'))"></i>
+										<div style="overflow: hidden;" ng-class="{in:msg.t==1,out:msg.t==0,last:msg==chatPanel.hr}">
+											<img ng-src="{{msg.t==1?(infoCache[chatPanel.id].headshot):mine.headshot}}" class="m-headshot" />
+											<div class="chat-pop">{{msg.m}}</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="trow">
+							<div class="editor-box">
+								<table>
+									<tr>
+										<td><textarea ng-keydown="checkKey($event,chatPanel)" ng-model="chatPanel.message" style="height:60px;;" class="textarea-message form-control input-sm" /></textarea>
+											<td style="width:70px">
+												<a class="send btn btn-primary btn-sm" ng-click="chatManager.say(chatPanel)"><span class="glyphicon glyphicon-send"></span> 发送</a>
+											</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		
+		<ul class="dropdown-menu" id="groupdropdown">
+		 	<li ng-click="editgroup()" ><a href="#">修改分组名称</a></li>
+		    <li ng-click="removegroup()"><a href="#">删除分组</a></li>
+	   
+	   
+	  	</ul>
+	   	<ul class="dropdown-menu" id="addgroupdropdown">
+	 	 	<li ng-click="addgroup()" ><a href="#">添加分组</a></li>
+	  	</ul>
+		<script>
+			
+		</script>
+	</body>
+
+</html>
